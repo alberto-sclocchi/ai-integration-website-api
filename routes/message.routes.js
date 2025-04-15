@@ -18,7 +18,7 @@ router.post("/", (req, res, next) => {
     firstName,
     lastName,
     email,
-    phoneNumber: `+${countryCode} ${phoneNumber}`,
+    phoneNumber: `+${countryCode.split('_')[1]} ${phoneNumber}`,
     message
   }
 
