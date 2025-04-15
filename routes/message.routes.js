@@ -15,10 +15,23 @@ router.post("/", (req, res, next) => {
 
   Message.create(req.body)
   .then((message) => {
-    res.json({message: message, success: "true"});
+    res.json({message: "Thank you for reaching out to us! We have received your message and will get back to you as soon as possible.", success: true});
   })
   .catch((err)=>{
-    res.json({message: err, success: "false"})
+    res.json({message: err, success: false})
+  })
+
+});
+
+
+router.get("/", (req, res, next) => {
+  
+  Message.find()
+  .then((messages) => {
+    res.json({message: messages, success: true});
+  })
+  .catch((err)=>{
+    res.json({messages: err, success: false})
   })
 
 });
