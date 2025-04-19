@@ -11,7 +11,7 @@ router.post("/", (req, res, next) => {
   const { firstName, lastName, email, phoneNumber, message, countryCode} = req.body;
 
   if(firstName === "" || lastName === ""  || email  === "" || phoneNumber  === "" || message === "" || countryCode === ""){
-    res.json({message: "Please fill in the required info before proceeding."});
+    res.json({message: "Please fill in the required info before proceeding.", success: false});
     return;
   }
 
@@ -22,6 +22,12 @@ router.post("/", (req, res, next) => {
     email,
     phoneNumber: `+${countryCode.split('_')[1]} ${phoneNumber}`,
     message
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    res.json({ message: "Provide a valid email address." , success: false});
+    return;
   }
 
   Message.create(updateMessage)
