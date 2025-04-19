@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message.model");
+const transporter = require("../config/nodemailer")
+
 
 // POST route to create a new message
 router.post("/", (req, res, next) => {
@@ -25,6 +27,20 @@ router.post("/", (req, res, next) => {
   Message.create(updateMessage)
   .then((message) => {
     res.json({message: "Thank you for reaching out to us! We have received your message and will get back to you as soon as possible.", success: true});
+
+    transporter.sendMail({
+      from: "albe.sclocchi@gmail.com",
+      to: "scloks75tv@gmail.com",
+      subject: `${message.firstName} ${message.lastName} is trying to reach out to you!`,
+      text: "Thank you!",
+      html: `<p>${message.firstName} ${message.lastName} has sent you the following message: </p>
+      <hr>
+      <p>"${message.message}"<p/>
+      <hr>
+      <p><b>Email: </b>${message.email}<p/>
+      <p><b>Phone Number: </b>${message.phoneNumber}<p/>`
+  });
+
   })
   .catch((err)=>{
     res.json({message: err, success: false})
